@@ -1,0 +1,1 @@
+import pkg from 'pg'; const { Client } = pkg; const client = new Client({ connectionString: process.env.DATABASE_URL_UNPOOLED }); await client.connect(); await client.query('TRUNCATE TABLE "ChatbotKnowledge" CASCADE'); console.log('Truncated'); process.exit(0);

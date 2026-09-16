@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Applicant {
+  id              String          @id @default(cuid())
+  applicationId   String          @unique
+  academicYear    String          @default("2569")
+  nationalId      String          @unique
+  prefix          String
+  firstName       String
+  lastName        String
+  phone           String
+  email           String?
+  programId       String?
+  term            String          @default("1")
+  pdpaConsent     Boolean         @default(false)
+  pdpaConsentDate DateTime?
+  status          ApplicantStatus @default(PENDING)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  magicToken      String?         @unique
+  remark          String?
+  studyLocation   String?
+  program         Program?        @relation(fields: [programId], references: [id])
+  documents       Document[]
+}
+
+model Program {
+  id           String      @id @default(cuid())
+  code         String      @unique
+  name         String
+  isOpen       Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  contactPhone String?
+  contactUrl   String?
+  facebookUrl  String?
+  lineOaUrl    String?
+  contactName  String?
+  tiktokUrl    String?
+  posterFileId String?
+  posterUrl    String?
+  locations    String[]    @default([])
+  staffMembers AdminUser[]
+  applicants   Applicant[]
+}
+
+model Document {
+  id          String       @id @default(cuid())
+  type        DocumentType
+  fileUrl     String
+  applicantId String
+  createdAt   DateTime     @default(now())
+  applicant   Applicant    @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+}
+
+model AdminUser {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  role      AdminRole @default(STAFF)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  programId String?
+  program   Program?  @relation(fields: [programId], references: [id])
+}
+
+model ChatbotKnowledge {
+  id        String   @id @default(cuid())
+  content   String
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  topic     String
+}
+
+enum ApplicantStatus {
+  PENDING
+  DOCUMENT_REQUESTED
+  APPROVED
+  REJECTED
+  PAID
+}
+
+enum DocumentType {
+  TRANSCRIPT
+  ID_CARD
+  HOUSE_REGISTRATION
+  PHOTO
+  OTHER
+}
+
+enum AdminRole {
+  ADMIN
+  STAFF
+}
+
+model SystemSettings {
+  id                    String   @id @default("1")
+  isGlobalAdmissionOpen Boolean  @default(true)
+  currentTerm           String   @default("1")
+  currentAcademicYear   String   @default("2569")
+  updatedAt             DateTime @updatedAt
+}

@@ -1,0 +1,1 @@
+const fs = require('fs'); const { PDFParse } = require('pdf-parse'); async function main() { const parser = new PDFParse({ data: new Uint8Array(Buffer.from('dummy')) }); try { await parser.load(); } catch(e) {} } main();

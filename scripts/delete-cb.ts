@@ -1,0 +1,1 @@
+import prisma from '../src/lib/prisma'; async function main() { await prisma.chatbotKnowledge.deleteMany(); console.log('Deleted'); } main();
