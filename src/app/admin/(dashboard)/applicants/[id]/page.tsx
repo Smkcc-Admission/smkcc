@@ -7,6 +7,8 @@ import DeleteApplicantButton from "@/components/admin/DeleteApplicantButton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+import AdminDocumentManager from "@/components/admin/AdminDocumentManager";
+
 export default async function ApplicantDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const session = await getServerSession(authOptions);
@@ -33,30 +35,6 @@ export default async function ApplicantDetailPage({ params }: { params: Promise<
   const houseRegFiles = applicant.documents.filter(d => d.type === 'HOUSE_REGISTRATION');
   const photoFiles = applicant.documents.filter(d => d.type === 'PHOTO');
   const otherFiles = applicant.documents.filter(d => d.type === 'OTHER');
-
-  const renderFileList = (files: any[]) => {
-    if (!files || files.length === 0) return <p className="text-gray-500 italic text-sm">ยังไม่ได้อัปโหลด</p>;
-    return (
-      <ul className="space-y-2 mt-2">
-        {files.map((file, i) => (
-          <li key={file.id} className="flex items-center gap-2">
-            <a 
-              href={file.fileUrl} 
-              target="_blank" 
-              rel="noreferrer"
-              className="text-blue-600 hover:underline flex items-center gap-2 text-sm"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-              </svg>
-              ไฟล์ที่ {i + 1}
-            </a>
-            <span className="text-xs text-gray-400">- อัปโหลดเมื่อ {new Date(file.createdAt).toLocaleDateString('th-TH')}</span>
-          </li>
-        ))}
-      </ul>
-    );
-  };
 
   return (
     <div className="space-y-6">
@@ -105,31 +83,41 @@ export default async function ApplicantDetailPage({ params }: { params: Promise<
           <h3 className="text-lg font-bold border-b pb-2">เอกสารประกอบการสมัคร</h3>
           
           <div className="space-y-4">
-            <div className="p-3 bg-gray-50 rounded border">
-              <div className="font-semibold text-gray-700">สำเนาบัตรประชาชน</div>
-              {renderFileList(idCardFiles)}
-            </div>
-
-            <div className="p-3 bg-gray-50 rounded border">
-              <div className="font-semibold text-gray-700">สำเนาทะเบียนบ้าน</div>
-              {renderFileList(houseRegFiles)}
-            </div>
-
-            <div className="p-3 bg-gray-50 rounded border">
-              <div className="font-semibold text-gray-700">ระเบียนแสดงผลการเรียน (ปพ.1)</div>
-              {renderFileList(transcriptFiles)}
-            </div>
-
-            <div className="p-3 bg-gray-50 rounded border">
-              <div className="font-semibold text-gray-700">รูปถ่าย 1 นิ้ว</div>
-              {renderFileList(photoFiles)}
-            </div>
-
+            <AdminDocumentManager 
+              applicantId={applicant.id}
+              title="สำเนาบัตรประชาชน"
+              documentType="ID_CARD"
+              files={idCardFiles}
+            />
+            
+            <AdminDocumentManager 
+              applicantId={applicant.id}
+              title="สำเนาทะเบียนบ้าน"
+              documentType="HOUSE_REGISTRATION"
+              files={houseRegFiles}
+            />
+            
+            <AdminDocumentManager 
+              applicantId={applicant.id}
+              title="ระเบียนแสดงผลการเรียน (ปพ.1)"
+              documentType="TRANSCRIPT"
+              files={transcriptFiles}
+            />
+            
+            <AdminDocumentManager 
+              applicantId={applicant.id}
+              title="รูปถ่าย 1 นิ้ว"
+              documentType="PHOTO"
+              files={photoFiles}
+            />
+            
             {otherFiles.length > 0 && (
-              <div className="p-3 bg-gray-50 rounded border">
-                <div className="font-semibold text-gray-700">เอกสารอื่นๆ</div>
-                {renderFileList(otherFiles)}
-              </div>
+              <AdminDocumentManager 
+                applicantId={applicant.id}
+                title="เอกสารอื่นๆ"
+                documentType="OTHER"
+                files={otherFiles}
+              />
             )}
           </div>
         </div>
