@@ -1,6 +1,6 @@
 "use client";
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, AreaChart, Area } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, AreaChart, Area, LabelList } from "recharts";
 import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
 import { format, startOfDay, startOfWeek, startOfMonth, parseISO, isSameDay } from "date-fns";
@@ -210,7 +210,9 @@ export default function DashboardCharts({
                     radius={[4, 4, 0, 0]} 
                     onClick={onBarClick}
                     className="cursor-pointer"
-                  />
+                  >
+                    <LabelList dataKey="total" position="top" fill="#6b7280" fontSize={11} />
+                  </Bar>
                   <Bar 
                     name="ชำระเงินแล้ว"
                     dataKey="paid" 
@@ -218,7 +220,9 @@ export default function DashboardCharts({
                     radius={[4, 4, 0, 0]} 
                     onClick={onBarClick}
                     className="cursor-pointer"
-                  />
+                  >
+                    <LabelList dataKey="paid" position="top" fill="#6b7280" fontSize={11} />
+                  </Bar>
                 </BarChart>
               ) : (
                 <BarChart
@@ -240,7 +244,9 @@ export default function DashboardCharts({
                     onClick={onBarClick}
                     className="cursor-pointer"
                     barSize={40}
-                  />
+                  >
+                    <LabelList dataKey="value" position="top" fill="#6b7280" fontSize={11} />
+                  </Bar>
                 </BarChart>
               )}
             </ResponsiveContainer>
