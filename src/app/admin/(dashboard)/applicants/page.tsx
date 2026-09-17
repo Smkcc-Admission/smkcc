@@ -173,7 +173,16 @@ export default async function AdminApplicantsPage({ searchParams }: { searchPara
                 return (
                   <tr key={app.id} className="hover:bg-gray-50">
                     <td className="px-4 py-4 font-medium text-blue-600">{app.applicationId}</td>
-                    <td className="px-4 py-4">{app.prefix}{app.firstName} {app.lastName}</td>
+                    <td className="px-4 py-4">
+                      <div className="flex items-center gap-2">
+                        <span>{app.prefix}{app.firstName} {app.lastName}</span>
+                        {app.remark?.includes("แอดมิน") && (
+                          <span className="px-2 py-0.5 text-xs bg-purple-100 text-purple-700 rounded-full border border-purple-200" title="เพิ่มโดยเจ้าหน้าที่">
+                            Staff
+                          </span>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-4 py-4">{app.phone}</td>
                     <td className="px-4 py-4">{app.program?.name || "-"}</td>
                     <td className="px-4 py-4">{app.term}/{app.academicYear}</td>

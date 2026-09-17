@@ -112,6 +112,7 @@ export async function createApplicantAdmin(data: {
         pdpaConsent: true, // Assuming admin got physical consent
         pdpaConsentDate: new Date(),
         status: data.status as any,
+        remark: "เพิ่มเข้าระบบโดยเจ้าหน้าที่ (แอดมิน)",
       }
     });
 
