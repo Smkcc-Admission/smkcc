@@ -29,6 +29,9 @@ export default async function PublicStatsPage({ searchParams }: { searchParams: 
   const approvedApplicants = await prisma.applicant.count({ where: { ...whereCondition, status: 'APPROVED' } });
   const paidApplicants = await prisma.applicant.count({ where: { ...whereCondition, status: 'PAID' } });
   const rejectedApplicants = await prisma.applicant.count({ where: { ...whereCondition, status: 'REJECTED' } });
+  
+  const onsiteApplicants = await prisma.applicant.count({ where: { ...whereCondition, remark: { contains: "เจ้าหน้าที่" } } });
+  const onlineApplicants = totalApplicants - onsiteApplicants;
 
   // Get total applicants matching current status and term (ignoring programId filter)
   const totalAllProgramsWhere: any = {};
@@ -288,6 +291,29 @@ export default async function PublicStatsPage({ searchParams }: { searchParams: 
                 href={`/stats?${new URLSearchParams({ status: 'REJECTED', ...(programId ? { programId } : {}), ...(term && term !== 'all' ? { term } : {}) }).toString()}`}
                 isActive={status === 'REJECTED'}
                 colorTheme="red"
+              />
+            </div>
+          </div>
+
+          {/* NEW: Application Source Cards */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <h3 className="text-lg font-bold text-[#1e3a8a] mb-4 text-center md:text-left">ช่องทางการรับสมัคร</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-4">
+              <StatCard
+                title="สมัครด้วยตนเอง (ออนไลน์)"
+                value={onlineApplicants}
+                totalValue={totalApplicants}
+                trendValue={buildSparkline(a => !a.remark?.includes("เจ้าหน้าที่")).trendValue}
+                sparklineData={buildSparkline(a => !a.remark?.includes("เจ้าหน้าที่")).sparklineData}
+                colorTheme="blue"
+              />
+              <StatCard
+                title="เจ้าหน้าที่เพิ่มให้ (ออนไซต์)"
+                value={onsiteApplicants}
+                totalValue={totalApplicants}
+                trendValue={buildSparkline(a => !!a.remark?.includes("เจ้าหน้าที่")).trendValue}
+                sparklineData={buildSparkline(a => !!a.remark?.includes("เจ้าหน้าที่")).sparklineData}
+                colorTheme="orange"
               />
             </div>
           </div>
