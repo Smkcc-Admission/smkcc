@@ -74,7 +74,7 @@ export default async function ApplicantDetailPage({ params }: { params: Promise<
             <div className="col-span-2">{applicant.email}</div>
 
             <div className="text-gray-500">วันที่สมัคร:</div>
-            <div className="col-span-2">{applicant.createdAt.toLocaleString('th-TH')}</div>
+            <div className="col-span-2">{applicant.createdAt.toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })}</div>
           </div>
         </div>
 

@@ -187,7 +187,7 @@ export default async function AdminApplicantsPage({ searchParams }: { searchPara
                     <td className="px-4 py-4">{app.program?.name || "-"}</td>
                     <td className="px-4 py-4">{app.term}/{app.academicYear}</td>
                     <td className="px-4 py-4">{app.studyLocation || "-"}</td>
-                    <td className="px-4 py-4">{app.createdAt.toLocaleDateString('th-TH')}</td>
+                    <td className="px-4 py-4">{app.createdAt.toLocaleDateString('th-TH', { timeZone: 'Asia/Bangkok' })}</td>
                     <td className="px-4 py-4">{getStatusBadge(app.status)}</td>
                     <td className="px-4 py-4 text-center">
                       <div className="flex justify-center gap-1">

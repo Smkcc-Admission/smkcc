@@ -97,7 +97,7 @@ export default function AdminDocumentManager({
                 </svg>
                 ไฟล์ที่ {i + 1}
               </a>
-              <span className="text-xs text-gray-400">- อัปโหลดเมื่อ {new Date(file.createdAt).toLocaleDateString('th-TH')}</span>
+              <span className="text-xs text-gray-400">- อัปโหลดเมื่อ {new Date(file.createdAt).toLocaleDateString('th-TH', { timeZone: 'Asia/Bangkok' })}</span>
             </li>
           ))}
         </ul>
