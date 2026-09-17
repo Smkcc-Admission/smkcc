@@ -15,8 +15,8 @@ type StatCardProps = {
   totalValue: number; // for percentage calculation
   trendValue: number; // total in the last 7 days
   sparklineData: SparklineDataPoint[];
-  href: string;
-  isActive: boolean;
+  href?: string;
+  isActive?: boolean;
   colorTheme?: "blue" | "green" | "yellow" | "orange" | "red" | "indigo";
   moneyEstimate?: number; // optional expected revenue
 };
@@ -40,17 +40,16 @@ export default function StatCard({
   totalValue,
   trendValue,
   sparklineData,
-  href,
-  isActive,
+  href = "#",
+  isActive = false,
   colorTheme = "blue",
   moneyEstimate
 }: StatCardProps) {
-  const percentage = totalValue > 0 ? Math.round((value / totalValue) * 100) : 0;
-  const theme = colorMap[colorTheme];
+  const percentage = totalValue > 0 ? ((value / totalValue) * 100).toFixed(1) : "0";
+  const theme = colorMap[colorTheme] || colorMap.blue;
 
-  return (
-    <Link href={href} className="block w-full h-full">
-      <Card className={`relative flex flex-col h-[130px] overflow-hidden transition-all hover:shadow-md cursor-pointer border-b-4 ${theme.border} ${isActive ? theme.bgActive : 'bg-white'}`}>
+  const content = (
+    <Card className={`relative flex flex-col h-[130px] overflow-hidden transition-all hover:shadow-md cursor-pointer border-b-4 ${theme.border} ${isActive ? theme.bgActive : 'bg-white'}`}>
         
         {/* Sparkline Background/Footer */}
         <div className="absolute bottom-0 left-0 right-0 h-14 opacity-20 pointer-events-none">
@@ -106,6 +105,15 @@ export default function StatCard({
           
         </div>
       </Card>
+    );
+
+  if (href === "#") {
+    return <div className="block w-full h-full">{content}</div>;
+  }
+  
+  return (
+    <Link href={href} className="block w-full h-full">
+      {content}
     </Link>
   );
 }
