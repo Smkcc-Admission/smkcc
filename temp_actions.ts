@@ -1,7 +1,6 @@
 ﻿"use server";
 
 import prisma from "@/lib/prisma";
-import { logActivity } from "@/lib/audit";
 import { revalidatePath } from "next/cache";
 import { sendStatusEmail } from "@/lib/email";
 import { getServerSession } from "next-auth";
@@ -149,7 +148,4 @@ export async function deleteApplicant(applicantId: string) {
     return { success: false, error: "เกิดข้อผิดพลาดในการลบข้อมูล" };
   }
 }
-
-
-
 

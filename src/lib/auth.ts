@@ -1,6 +1,7 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+﻿import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import prisma from "./prisma";
+import { logActivity } from "./audit";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -18,6 +19,7 @@ export const authOptions: NextAuthOptions = {
         });
         
         if (existingAdmin) {
+          logActivity({ action: "LOGIN", adminEmail: user.email!, details: "Logged in" });
           return true; // อนุญาตให้เข้าสู่ระบบได้
         } else {
           return false; // ปฏิเสธการเข้าสู่ระบบ
@@ -31,7 +33,7 @@ export const authOptions: NextAuthOptions = {
           where: { email: session.user.email },
         });
         if (existingAdmin) {
-          // สามารถแนบข้อมูล role ไปกับ session ได้
+          // เช็คและเพิ่ม role ให้ session
           (session.user as any).role = existingAdmin.role;
           (session.user as any).programId = existingAdmin.programId;
         }
@@ -49,3 +51,4 @@ export const authOptions: NextAuthOptions = {
 };
 
 export const handler = NextAuth(authOptions);
+

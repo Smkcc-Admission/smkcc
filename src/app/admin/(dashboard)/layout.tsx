@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth/next";
+﻿import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -53,6 +53,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                   ตั้งค่าระบบ (Settings)
                 </Button>
               </Link>
+              <Link href="/admin/logs">
+                <Button variant="ghost" className="w-full justify-start font-medium text-gray-700 hover:text-blue-700 hover:bg-blue-50">
+                  ประวัติการทำงาน (Logs)
+                </Button>
+              </Link>
             </>
           )}
         </nav>
@@ -83,3 +88,4 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     </div>
   );
 }
+

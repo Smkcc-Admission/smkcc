@@ -105,3 +105,13 @@ model SystemSettings {
   currentAcademicYear   String   @default("2569")
   updatedAt             DateTime @updatedAt
 }
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  action      String
+  adminEmail  String
+  targetId    String?
+  targetName  String?
+  details     String?
+  createdAt   DateTime @default(now())
+}
