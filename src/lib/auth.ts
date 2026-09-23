@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
         });
         
         if (existingAdmin) {
-          logActivity({ action: "LOGIN", adminEmail: user.email!, details: `"เข้าสู่ระบบ`" });
+          logActivity({ action: "LOGIN", adminEmail: user.email!, details: "เข้าสู่ระบบ" });
           return true; // อนุญาตให้เข้าสู่ระบบได้
         } else {
           return false; // ปฏิเสธการเข้าสู่ระบบ
@@ -44,7 +44,7 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signOut(message) {
       if ('token' in message && message.token?.email) {
-        await logActivity({ action: "LOGOUT", adminEmail: message.token.email, details: `"ออกจากระบบ`" });
+        await logActivity({ action: "LOGOUT", adminEmail: message.token.email, details: "ออกจากระบบ" });
       }
     }
   },
@@ -58,6 +58,7 @@ export const authOptions: NextAuthOptions = {
 };
 
 export const handler = NextAuth(authOptions);
+
 
 
 
