@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth";
+﻿import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
@@ -48,6 +48,7 @@ export default async function AuditLogsPage() {
                     <td className="px-4 py-3">
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                         log.action === 'LOGIN' ? 'bg-blue-100 text-blue-800' :
+                        log.action === 'LOGOUT' ? 'bg-gray-100 text-gray-800' :
                         log.action === 'UPDATE_STATUS' ? 'bg-amber-100 text-amber-800' :
                         log.action === 'CREATE_APPLICANT' ? 'bg-green-100 text-green-800' :
                         log.action === 'DELETE_APPLICANT' ? 'bg-red-100 text-red-800' :
@@ -74,3 +75,4 @@ export default async function AuditLogsPage() {
     </div>
   );
 }
+
