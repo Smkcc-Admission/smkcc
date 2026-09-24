@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -20,6 +20,7 @@ export default function LeadCaptureForm({ programs, initialProgramId }: { progra
   const [loading, setLoading] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [successId, setSuccessId] = useState<string | null>(null);
+  const [dbId, setDbId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedProgramId, setSelectedProgramId] = useState<string>("");
 
@@ -64,6 +65,7 @@ export default function LeadCaptureForm({ programs, initialProgramId }: { progra
       setIsAnimating(false);
       if (res.success) {
         setSuccessId(res.applicationId || null);
+          setDbId(res.id || null);
       } else {
         setError(res.error || "Something went wrong.");
       }
@@ -116,9 +118,18 @@ export default function LeadCaptureForm({ programs, initialProgramId }: { progra
           เพื่ออัปโหลดสำเนาบัตรประชาชน รูปถ่าย และวุฒิการศึกษา
         </p>
         
-        <div className="flex justify-center">
-          <Button variant="outline" className="border-[#1e3a8a] text-[#1e3a8a] hover:bg-blue-50" onClick={() => window.location.reload()}>กลับหน้าแรก</Button>
-        </div>
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+            {dbId && (
+              <Link href={`/applicant/`}>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto px-8 py-2 rounded-full shadow-md">
+                  อัปโหลดเอกสารทันที
+                </Button>
+              </Link>
+            )}
+            <Button variant="outline" className="border-[#1e3a8a] text-[#1e3a8a] hover:bg-blue-50 w-full sm:w-auto rounded-full px-8 py-2" onClick={() => window.location.reload()}>
+              กลับหน้าแรก
+            </Button>
+          </div>
       </div>
     );
   }
@@ -296,10 +307,8 @@ export default function LeadCaptureForm({ programs, initialProgramId }: { progra
             </div>
           </div>
         </CardContent>
-        <CardFooter className="bg-gray-50 p-6 rounded-b-xl flex justify-between items-center border-t">
-          <Link href="/resume">
-            <Button type="button" variant="ghost" className="text-gray-500">ฉันมีรหัสการสมัครแล้ว</Button>
-          </Link>
+        <CardFooter className="bg-gray-50 p-6 rounded-b-xl flex justify-end items-center border-t">
+          
           <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700 text-white px-8">
             {loading ? "กำลังบันทึก..." : "ยืนยันและรับรหัสการสมัคร"}
           </Button>
@@ -308,3 +317,7 @@ export default function LeadCaptureForm({ programs, initialProgramId }: { progra
     </Card>
   );
 }
+
+
+
+

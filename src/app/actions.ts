@@ -1,4 +1,4 @@
-"use server"
+﻿"use server"
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
@@ -75,7 +75,7 @@ export async function submitLeadCapture(data: {
 
     revalidatePath("/");
     
-    return { success: true, applicationId: applicant.applicationId };
+    return { success: true, applicationId: applicant.applicationId, id: applicant.id };
   } catch (error) {
     console.error(error);
     return { success: false, error: "เกิดข้อผิดพลาดจากระบบ กรุณาลองใหม่อีกครั้ง" };
@@ -128,3 +128,4 @@ export async function verifyMagicToken(token: string) {
     return { success: false, error: "เกิดข้อผิดพลาดจากระบบ" };
   }
 }
+

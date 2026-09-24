@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+﻿import prisma from "@/lib/prisma";
 import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
 import HomeClient from "@/components/HomeClient";
@@ -43,7 +43,10 @@ export default async function HomePage() {
           <Link href="/stats" className="text-sm font-medium text-gray-600 hover:text-[#1e3a8a] hidden sm:block transition-colors">
             สถิติผู้สมัคร
           </Link>
-          <Link href="/admin/login" className="text-sm font-semibold text-white bg-[#1e3a8a] hover:bg-[#152c6b] px-5 py-2 rounded shadow-sm transition-all">
+          <Link href="/resume" className="text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-full transition-colors border border-blue-100">
+              อัปโหลดเอกสาร / ตรวจสอบสถานะ
+            </Link>
+            <Link href="/admin/login" className="text-sm font-semibold text-white bg-[#1e3a8a] hover:bg-[#152c6b] px-5 py-2 rounded shadow-sm transition-all">
             สำหรับเจ้าหน้าที่
           </Link>
         </div>
@@ -80,3 +83,5 @@ export default async function HomePage() {
     </main>
   );
 }
+
+
