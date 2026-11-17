@@ -31,6 +31,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               จัดการข้อมูลผู้สมัคร
             </Button>
           </Link>
+          <Link href="/admin/payments">
+            <Button variant="ghost" className="w-full justify-start font-medium text-emerald-800 hover:text-emerald-900 hover:bg-emerald-50">
+              💳 ตรวจสอบการชำระเงิน
+            </Button>
+          </Link>
           <Link href="/admin/programs">
             <Button variant="ghost" className="w-full justify-start font-medium text-gray-700 hover:text-blue-700 hover:bg-blue-50">
               จัดการสาขาวิชา

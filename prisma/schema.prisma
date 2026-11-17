@@ -26,6 +26,7 @@ model Applicant {
   magicToken      String?         @unique
   remark          String?
   studyLocation   String?
+  paymentRemark   String?
   program         Program?        @relation(fields: [programId], references: [id])
   documents       Document[]
 }
@@ -90,6 +91,7 @@ enum DocumentType {
   ID_CARD
   HOUSE_REGISTRATION
   PHOTO
+  PAYMENT_SLIP
   OTHER
 }
 

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import DocumentUploader from "@/components/DocumentUploader";
+import PaymentSlipUploader from "@/components/PaymentSlipUploader";
 export default async function ApplicantDashboard({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const applicant = await prisma.applicant.findUnique({
@@ -14,6 +15,9 @@ export default async function ApplicantDashboard({ params }: { params: Promise<{
   if (!applicant) {
     notFound();
   }
+
+  const paymentSlips = applicant.documents.filter(d => d.type === 'PAYMENT_SLIP');
+  const generalDocs = applicant.documents.filter(d => d.type !== 'PAYMENT_SLIP');
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -104,21 +108,40 @@ export default async function ApplicantDashboard({ params }: { params: Promise<{
               </CardContent>
             </Card>
 
+            {/* การ์ดอัปโหลดสลิปชำระเงิน (แยกอิสระ) */}
+            <Card className="shadow-md border-emerald-300">
+              <CardHeader className="bg-emerald-50 border-b border-emerald-100">
+                <CardTitle className="text-emerald-900 flex items-center justify-between">
+                  <span>หลักฐานการชำระเงิน (สลิปโอนเงิน)</span>
+                  <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-medium">การเงิน</span>
+                </CardTitle>
+                <CardDescription>แนบสลิปโอนเงินค่าลงทะเบียนเรียน/ค่าธรรมเนียม</CardDescription>
+              </CardHeader>
+              <CardContent className="p-6">
+                <PaymentSlipUploader
+                  applicantId={applicant.id}
+                  paymentSlips={paymentSlips}
+                  applicantStatus={applicant.status}
+                  paymentRemark={applicant.paymentRemark}
+                />
+              </CardContent>
+            </Card>
+
             <Card className="shadow-md border-blue-200">
               <CardHeader className="bg-blue-50 border-b border-blue-100">
-                <CardTitle className="text-blue-800">อัปโหลดเอกสาร</CardTitle>
-                <CardDescription>ไฟล์รูปภาพ หรือ PDF (ไม่เกิน 5MB)</CardDescription>
+                <CardTitle className="text-blue-800">อัปโหลดเอกสารทั่วไป</CardTitle>
+                <CardDescription>สำเนาบัตรประชาชน, ทะเบียนบ้าน, วุฒิการศึกษา (ไม่เกิน 5MB)</CardDescription>
               </CardHeader>
               <CardContent className="p-6 space-y-4">
                 <DocumentUploader applicantId={applicant.id} />
                 
                 <div className="space-y-2">
-                  <h4 className="text-sm font-bold text-gray-700">เอกสารที่อัปโหลดแล้ว</h4>
-                  {applicant.documents.length === 0 ? (
+                  <h4 className="text-sm font-bold text-gray-700">เอกสารทั่วไปที่อัปโหลดแล้ว</h4>
+                  {generalDocs.length === 0 ? (
                     <p className="text-xs text-red-500">ยังไม่มีเอกสาร</p>
                   ) : (
                     <ul className="text-sm space-y-1">
-                      {applicant.documents.map(doc => (
+                      {generalDocs.map(doc => (
                         <li key={doc.id} className="text-blue-600 underline">
                           <a href={doc.fileUrl} target="_blank" rel="noreferrer">เอกสาร ({doc.type})</a>
                         </li>

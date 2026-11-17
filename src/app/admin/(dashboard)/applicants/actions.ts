@@ -150,6 +150,69 @@ export async function deleteApplicant(applicantId: string) {
   }
 }
 
+export async function verifyPaymentSlip(applicantId: string, approved: boolean, reason?: string) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  const userRole = (session.user as any).role;
+  const userProgramId = (session.user as any).programId;
+
+  try {
+    const existingApplicant = await prisma.applicant.findUnique({ where: { id: applicantId } });
+    if (!existingApplicant) throw new Error("Applicant not found");
+
+    if (userRole === 'STAFF' && existingApplicant.programId !== userProgramId) {
+      return { success: false, error: "ไม่อนุญาต: คุณสามารถจัดการได้เฉพาะผู้สมัครในสาขาวิชาของคุณเท่านั้น" };
+    }
+
+    if (approved) {
+      await prisma.applicant.update({
+        where: { id: applicantId },
+        data: {
+          status: 'PAID',
+          paymentRemark: null,
+        },
+      });
+
+      await logActivity({
+        action: "UPDATE_STATUS",
+        adminEmail: session.user?.email || "Unknown",
+        targetId: applicantId,
+        targetName: `${existingApplicant.prefix}${existingApplicant.firstName} ${existingApplicant.lastName}`,
+        details: `อนุมัติการชำระเงิน (PAID) สำหรับผู้สมัคร ${existingApplicant.applicationId}`,
+      });
+    } else {
+      await prisma.applicant.update({
+        where: { id: applicantId },
+        data: {
+          paymentRemark: reason || "หลักฐานการชำระเงินไม่ถูกต้อง โปรดแนบสลิปใหม่อีกครั้ง",
+        },
+      });
+
+      await logActivity({
+        action: "UPDATE_STATUS",
+        adminEmail: session.user?.email || "Unknown",
+        targetId: applicantId,
+        targetName: `${existingApplicant.prefix}${existingApplicant.firstName} ${existingApplicant.lastName}`,
+        details: `ขอให้แนบสลิปใหม่สำหรับผู้สมัคร ${existingApplicant.applicationId}: ${reason || "ไม่มีระบุ"}`,
+      });
+    }
+
+    revalidatePath("/admin/payments");
+    revalidatePath("/admin/applicants");
+    revalidatePath(`/admin/applicants/${applicantId}`);
+    revalidatePath(`/applicant/${applicantId}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to verify payment slip:", error);
+    return { success: false, error: "ไม่สามารถบันทึกผลการตรวจสอบสลิปได้" };
+  }
+}
+
+
 
 
 

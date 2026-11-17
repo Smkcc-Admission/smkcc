@@ -34,6 +34,7 @@ export default async function ApplicantDetailPage({ params }: { params: Promise<
   const transcriptFiles = applicant.documents.filter(d => d.type === 'TRANSCRIPT');
   const houseRegFiles = applicant.documents.filter(d => d.type === 'HOUSE_REGISTRATION');
   const photoFiles = applicant.documents.filter(d => d.type === 'PHOTO');
+  const paymentSlipFiles = applicant.documents.filter(d => d.type === 'PAYMENT_SLIP');
   const otherFiles = applicant.documents.filter(d => d.type === 'OTHER');
 
   return (
@@ -111,6 +112,13 @@ export default async function ApplicantDetailPage({ params }: { params: Promise<
               files={photoFiles}
             />
             
+            <AdminDocumentManager 
+              applicantId={applicant.id}
+              title="สลิปหลักฐานการชำระเงิน"
+              documentType="PAYMENT_SLIP"
+              files={paymentSlipFiles}
+            />
+
             {otherFiles.length > 0 && (
               <AdminDocumentManager 
                 applicantId={applicant.id}
