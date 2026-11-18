@@ -41,6 +41,9 @@ export default async function PrintReportPage({ searchParams }: { searchParams: 
     ]
   });
 
+  const hasAnyStudyLocation = applicants.some(a => !!a.studyLocation);
+  const totalColumns = hasAnyStudyLocation ? 8 : 7;
+
   return (
     <div className="min-h-screen p-8 print:p-0" style={{ backgroundColor: '#ffffff', color: '#000000' }}>
       <div className="w-full max-w-5xl mx-auto print:max-w-none print:w-full">
@@ -66,7 +69,7 @@ export default async function PrintReportPage({ searchParams }: { searchParams: 
           <table style={{ width: '100%', fontSize: '12px', borderCollapse: 'collapse' }}>
             <thead style={{ display: 'table-header-group', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
               <tr>
-                <td colSpan={7} style={{ paddingBottom: '16px', border: 'none', backgroundColor: '#ffffff' }}>
+                <td colSpan={totalColumns} style={{ paddingBottom: '16px', border: 'none', backgroundColor: '#ffffff' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     <img src="/logo.png" alt="SMKCC Logo" style={{ height: '48px', width: 'auto' }} />
                     <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0, color: '#000000' }}>
@@ -81,6 +84,9 @@ export default async function PrintReportPage({ searchParams }: { searchParams: 
                 <th style={{ padding: '8px 12px', textAlign: 'left', whiteSpace: 'nowrap' }}>ชื่อ-นามสกุล</th>
                 <th style={{ padding: '8px 12px', textAlign: 'left', whiteSpace: 'nowrap' }}>เบอร์ติดต่อ</th>
                 <th style={{ padding: '8px 12px', textAlign: 'left', whiteSpace: 'nowrap' }}>สาขาวิชา</th>
+                {hasAnyStudyLocation && (
+                  <th style={{ padding: '8px 12px', textAlign: 'left', whiteSpace: 'nowrap' }}>สถานที่เรียน</th>
+                )}
                 <th style={{ padding: '8px 12px', textAlign: 'left', whiteSpace: 'nowrap' }}>เอกสาร</th>
                 <th style={{ padding: '8px 12px', textAlign: 'left', whiteSpace: 'nowrap' }}>สถานะ</th>
               </tr>
@@ -88,7 +94,7 @@ export default async function PrintReportPage({ searchParams }: { searchParams: 
             
             <tfoot style={{ display: 'table-footer-group' }}>
               <tr>
-                <td colSpan={7} style={{ border: 'none', backgroundColor: '#ffffff' }}>
+                <td colSpan={totalColumns} style={{ border: 'none', backgroundColor: '#ffffff' }}>
                   {(() => {
                     const today = new Date();
                     const d = today.getDate();
@@ -134,6 +140,9 @@ export default async function PrintReportPage({ searchParams }: { searchParams: 
                     <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{app.prefix}{app.firstName} {app.lastName}</td>
                     <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{app.phone}</td>
                     <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{app.program?.name || "-"}</td>
+                    {hasAnyStudyLocation && (
+                      <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{app.studyLocation || "-"}</td>
+                    )}
                     <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>
                       {missingDocs.length === 0 ? "ครบถ้วน" : `ขาด: ${missingDocs.join(', ')}`}
                     </td>
@@ -143,7 +152,7 @@ export default async function PrintReportPage({ searchParams }: { searchParams: 
               })}
               {applicants.length === 0 && (
                 <tr style={{ backgroundColor: '#ffffff' }}>
-                  <td colSpan={7} style={{ padding: '32px 12px', textAlign: 'center', color: '#6b7280' }}>
+                  <td colSpan={totalColumns} style={{ padding: '32px 12px', textAlign: 'center', color: '#6b7280' }}>
                     ไม่พบข้อมูลผู้สมัคร
                   </td>
                 </tr>

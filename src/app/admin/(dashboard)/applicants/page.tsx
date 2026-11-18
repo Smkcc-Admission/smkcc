@@ -153,6 +153,7 @@ export default async function AdminApplicantsPage({ searchParams }: { searchPara
               <tr>
                 <th className="px-4 py-4 font-medium">เลขที่ผู้สมัคร</th>
                 <th className="px-4 py-4 font-medium">ชื่อ-นามสกุล</th>
+                <th className="px-4 py-4 font-medium">เลขบัตรประชาชน</th>
                 <th className="px-4 py-4 font-medium">เบอร์โทรศัพท์</th>
                 <th className="px-4 py-4 font-medium">สาขาวิชา</th>
                 <th className="px-4 py-4 font-medium">เทอม</th>
@@ -183,6 +184,7 @@ export default async function AdminApplicantsPage({ searchParams }: { searchPara
                         )}
                       </div>
                     </td>
+                    <td className="px-4 py-4 font-mono text-gray-700">{app.nationalId}</td>
                     <td className="px-4 py-4">{app.phone}</td>
                     <td className="px-4 py-4">{app.program?.name || "-"}</td>
                     <td className="px-4 py-4">{app.term}/{app.academicYear}</td>
@@ -208,7 +210,7 @@ export default async function AdminApplicantsPage({ searchParams }: { searchPara
               
               {applicants.length === 0 && (
                 <tr>
-                  <td colSpan={8} className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan={11} className="px-4 py-8 text-center text-gray-500">
                     ไม่พบข้อมูลผู้สมัคร
                   </td>
                 </tr>
